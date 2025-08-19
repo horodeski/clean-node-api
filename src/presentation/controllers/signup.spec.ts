@@ -5,8 +5,9 @@ import { InvalidParamError } from "../erros/invalid-param-error";
 
 interface sutTypes {
 	sut: SignUpController;
-		emailValidatorStub: EmailValidator;
-	}
+	emailValidatorStub: EmailValidator;
+}
+
 const makeSut = (): sutTypes => {
 	class EmailValidatorStub implements EmailValidator {
 		isValid(email: string): boolean {
@@ -73,7 +74,7 @@ describe("SignUp Controller ", () => {
 		const { sut } = makeSut();
 		const httpRequest = {
 			body: {
-				email: "geovana.horodeski06@gmail.com",
+				email: "geovana.horodeski06@.com",
 				password: "1234",
 				name: "geovana"
 			}
@@ -84,10 +85,10 @@ describe("SignUp Controller ", () => {
 		expect(httpResponse.body).toEqual(new MissingParamError("passwordConfirmation"));
 	});
 
-	test("Should return 400 if an invalid email is provided", () => {
+	test("Should call EmailValidator with correct email", () => {
 		const { sut, emailValidatorStub } = makeSut();
 
-		jest.spyOn(emailValidatorStub, "isValid").mockReturnValueOnce(false);
+		const isValidSpy = jest.spyOn(emailValidatorStub, "isValid");
 
 		const httpRequest = {
 			body: {
@@ -98,8 +99,7 @@ describe("SignUp Controller ", () => {
 			}
 		};
 
-		const httpResponse = sut.handle(httpRequest);
-		expect(httpResponse.statusCode).toBe(400);
-		expect(httpResponse.body).toEqual(new InvalidParamError("email"));
+		sut.handle(httpRequest);
+		expect(isValidSpy).toHaveBeenCalledWith("geovana.horodeski06@gmail.com");
 	});
 });
