@@ -1,7 +1,8 @@
-import { MissingParamError } from "../erros/missing-param-error";
+import { MissingParamError } from "../errors/missing-param-error";
 import { SignUpController } from "./signup";
 import { EmailValidator } from "../protocols/email-validator";
-import { InvalidParamError } from "../erros/invalid-param-error";
+import { InvalidParamError } from "../errors/invalid-param-error";
+import { ServerError } from "../errors/server-error";
 
 interface sutTypes {
 	sut: SignUpController;
@@ -92,7 +93,7 @@ describe("SignUp Controller ", () => {
 
 		const httpRequest = {
 			body: {
-				email: "geovana.horodeski06gmail.com",
+				email: "geovana.horodeski06@gmail.com",
 				password: "1234",
 				passwordConfirmation: "1234",
 				name: "geovana"
@@ -101,5 +102,30 @@ describe("SignUp Controller ", () => {
 
 		sut.handle(httpRequest);
 		expect(isValidSpy).toHaveBeenCalledWith("geovana.horodeski06@gmail.com");
+	});
+
+	test("Should return 500 if EmailValidator throws", () => {
+		class EmailValidatorStub implements EmailValidator {
+			isValid(email: string): boolean {
+				throw new Error();
+			}
+		}
+
+		const emailValidatorStub = new EmailValidatorStub();
+		const sut = new SignUpController(emailValidatorStub);
+
+		const httpRequest = {
+			body: {
+				email: "geovana.horodeski06@gmail.com",
+				password: "1234",
+				passwordConfirmation: "1234",
+				name: "geovana"
+			}
+		};
+
+		const httpResponse = sut.handle(httpRequest);
+
+		expect(httpResponse.statusCode).toBe(500);
+		expect(httpResponse.body).toEqual(new ServerError());
 	});
 });
