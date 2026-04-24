@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
@@ -16,17 +17,21 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
-    "@shelf/jest-mongodb": "^5.2.2",
+    "@shelf/jest-mongodb": "^6.0.2",
     "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/mongodb": "^4.0.6",
     "@types/node": "^24.0.13",
+    "@types/supertest": "^7.2.0",
     "@types/validator": "^13.15.2",
     "eslint": "^8.57.1",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
     "jest": "^30.0.4",
     "lint-staged": "^16.1.2",
+    "sucrase": "^3.35.1",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
@@ -39,7 +44,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-standard": "^4.1.0",
-    "mongodb": "^6.19.0",
+    "express": "^5.2.1",
+    "fast-glob": "^3.3.3",
+    "mongodb": "^6.21.0",
+    "mongodb-memory-server": "^11.0.1",
     "validator": "^13.15.15"
   }
 }

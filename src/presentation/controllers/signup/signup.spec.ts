@@ -24,7 +24,7 @@ const makeAddAccount = (): AddAccount => {
 			return new Promise((resolve) => resolve(fakeAccount));
 		}
 	}
-
+ 
 	return new AddAccountStub();
 };
 
